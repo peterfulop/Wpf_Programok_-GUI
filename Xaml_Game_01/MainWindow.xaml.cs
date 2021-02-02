@@ -121,6 +121,7 @@ namespace Xaml_Game_01
             UjKartyaHuzasa();
         }
 
+
         private void Pontszerzes(bool add)
         {
 
