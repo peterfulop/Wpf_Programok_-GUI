@@ -15,6 +15,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Xaml_Game_01
 {
@@ -29,34 +30,53 @@ namespace Xaml_Game_01
         public Random Dobokocka { get; private set; }
         public int Pontok { get;  set; }
         public bool Run { get;  private set; }
+        public DispatcherTimer Ingaora { get;  private set; }
+        public TimeSpan JatekIdo { get; private set; }
+        public Stopwatch stopperora { get; private set; }
+        public List<long> ListaReakcioIdohoz { get; private set; }
+
 
 
         public MainWindow()
         {
             InitializeComponent();
 
-            //indítás gomb engedélyezése
-            InditasGomb.IsEnabled = true;
-            
-            //igen/nem gomb letiltása
-            IgenGomb.IsEnabled = false;
-            NemGomb.IsEnabled = false;
-
-            Pontok = 0;
-            Run = false;
+            //Csak az alkalmazás indulásakor kell lefutnia *************************************************************************************************/
 
             //létrehozom a listát mint kártyapakli
             KartyaPakli = new List<FontAwesomeIcon>()
-            { 
-                FontAwesomeIcon.Flag, FontAwesomeIcon.Wifi, FontAwesomeIcon.Deaf, FontAwesomeIcon.Twitter, FontAwesomeIcon.Magic, FontAwesomeIcon.Edit 
+            {
+                FontAwesomeIcon.Flag, FontAwesomeIcon.Wifi, FontAwesomeIcon.Deaf, FontAwesomeIcon.Twitter, FontAwesomeIcon.Magic, FontAwesomeIcon.Edit
             };
 
             //Készítek egy véltlen szám generátort (dobókocka)
             Dobokocka = new Random();
 
-            UjKartyaHuzasa();
+            // Ingaóra létrehozása
+            Ingaora = new DispatcherTimer
+                (TimeSpan.FromSeconds(1),
+                DispatcherPriority.Normal,
+                Orautes,
+                Application.Current.Dispatcher);
+
+            Ingaora.Stop();
+
+            //Stopperóra létrehozása
+            stopperora = new Stopwatch();
+
+
+            /* **********************************************************************************************************************************************/
+
+
+            // Minden játék indításakor kell ****************************************************************************************************************/
+
+            jatekInditasa();
+
+            /* **********************************************************************************************************************************************/
+
         }
 
+       
 
         private void IgenGomb_Click(object sender, RoutedEventArgs e)
         {
@@ -78,7 +98,81 @@ namespace Xaml_Game_01
             Inditas();
         }
 
+        private void UjraInditasGomb_Click(object sender, RoutedEventArgs e)
+        {
+            jatekInditasa();
+            Inditas();
+
+        }
+
+
         //függvények
+        private void jatekInditasa()
+        {
+
+            ResetLabeles();
+
+            UjraInditasGomb.Visibility = Visibility.Hidden;
+            InditasGomb.Visibility = Visibility.Visible;
+
+            Pontok = 0;
+            Run = false;
+
+            JatekIdo = TimeSpan.FromSeconds(0);
+
+            //indítás gomb engedélyezése
+            InditasGomb.IsEnabled = true;
+
+            //igen/nem gomb letiltása
+            IgenGomb.IsEnabled = false;
+            NemGomb.IsEnabled = false;
+
+            //lista készítése a reakcióidő tárolására
+            ListaReakcioIdohoz = new List<long>();
+            
+            UjKartyaHuzasa();
+
+        }
+
+        private void ResetLabeles()
+        {
+            jatekidoLabel.Content = "00:00";
+            pontokLabel.Content = "0";
+            reakcioIdoLabel.Content = "0";
+            atlReakcioIdoLabel.Content = "0";
+        }
+
+        private void Orautes(object sender, EventArgs e)
+        {
+            JatekIdo += TimeSpan.FromSeconds(1);
+
+            LabelJatekido();
+
+            if (JatekIdo >= TimeSpan.FromSeconds(5))
+            {
+                JatekVegeAllapot();
+            }
+
+        }
+
+        private void LabelJatekido()
+        {
+            jatekidoLabel.Content = $"{JatekIdo.Minutes:00}:{JatekIdo.Seconds:00}";
+        }
+
+        private void JatekVegeAllapot()
+        {
+            Ingaora.Stop();
+
+            //igen/nem gomb letiltása
+            IgenGomb.IsEnabled = false;
+            NemGomb.IsEnabled = false;
+
+            UjraInditasGomb.Visibility = Visibility.Visible;
+            InditasGomb.Visibility = Visibility.Hidden;
+
+        }
+
         private void NemValasz()
         {
             //jó és rossz válasz vizsgálata
@@ -111,6 +205,8 @@ namespace Xaml_Game_01
 
         private void Inditas()
         {
+
+
             //indítás gomb letiltása
             InditasGomb.IsEnabled = false;
 
@@ -118,7 +214,14 @@ namespace Xaml_Game_01
             IgenGomb.IsEnabled = true;
             NemGomb.IsEnabled = true;
 
+            Ingaora.Start();
+
+            stopperora.Start();
+
             UjKartyaHuzasa();
+
+
+
         }
 
 
@@ -128,7 +231,6 @@ namespace Xaml_Game_01
             if (add)
             {
                 Pontok++;
-                pontokLabel.Content = Pontok;
             }
             else
             {
@@ -138,10 +240,23 @@ namespace Xaml_Game_01
                     MessageBox.Show("Vesztettél!");
                     Close();
                 }
-                pontokLabel.Content = Pontok;
             }
-         
+
+
+            ListaReakcioIdohoz.Add(stopperora.ElapsedMilliseconds);
+
+            LabelFill();
+
         }
+
+
+        private void LabelFill()
+        {
+            pontokLabel.Content = Pontok;
+            reakcioIdoLabel.Content = ListaReakcioIdohoz.Last();
+            atlReakcioIdoLabel.Content = (long)ListaReakcioIdohoz.Average();
+        }
+
 
         private void JoValasz()
         {
@@ -165,7 +280,6 @@ namespace Xaml_Game_01
             TimeSpan time = TimeSpan.FromMilliseconds(ms);
             var animacio = new DoubleAnimation(start, end, time);
             BalKartya.BeginAnimation(OpacityProperty, animacio);
-
         }
 
         private void RosszValasz()
@@ -186,8 +300,8 @@ namespace Xaml_Game_01
             //megadom hogy hol jelenjen meg
             JobbKartya.Icon = KartyaPakli[dobas];
             Animation(JobbKartya, true, 1000);
+            stopperora.Restart();
         }
-
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -208,5 +322,7 @@ namespace Xaml_Game_01
                 IgenValasz();
             }
         }
+
+
     }
 }

@@ -28,13 +28,13 @@
             és középre igazítom-->
             <WrapPanel Margin="5" HorizontalAlignment="Center">
                 <Label Content="Játékidő"/>
-                <Label Content="00:00"/>
+                <Label Content="" x:Name="jatekidoLabel" Width="50"/>
                 <Label Content="Pontszám:"/>
-                <Label Content="00" x:Name="pontokLabel"/>
+                <Label Content="" x:Name="pontokLabel" Width="50"/>
                 <Label Content="Reakció idő"/>
-                <Label Content="00"/>
+                <Label Content="" x:Name="reakcioIdoLabel" Width="50"/>
                 <Label Content="Átlagos reakció idő"/>
-                <Label Content="00"/>
+                <Label Content="" x:Name="atlReakcioIdoLabel" Width="50"/>
             </WrapPanel>
 
             <!--A második sor felosztom kér egyenlő részre-->
@@ -71,7 +71,12 @@
             <Button x:Name="InditasGomb" 
                     Content="Indítás" Grid.Row="2"
                     Margin="5" Padding="10"
-                    HorizontalAlignment="Right" Click="InditasGomb_Click"/>            
+                    HorizontalAlignment="Right" Click="InditasGomb_Click"/>
+            
+            <Button x:Name="UjraInditasGomb" 
+                    Content="ÚjraIndítás" Grid.Row="2"
+                    Margin="5" Padding="10"
+                    HorizontalAlignment="Right" Click="UjraInditasGomb_Click"/>
 
         </Grid>
         
