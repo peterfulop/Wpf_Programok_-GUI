@@ -1,0 +1,94 @@
+﻿<Page x:Class="WPF_MENU_ABLAKOK.OpenFile"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WPF_MENU_ABLAKOK"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="OpenFile">
+
+    <Grid Background="AliceBlue">
+        <StackPanel Width="500" MinHeight="250" Margin="0 20 0 20">
+            <Label Content="Szöveg:"
+                   TextElement.FontWeight="Bold"
+                   >
+            </Label>
+            
+            <RichTextBox x:Name="filePathRTF"
+                         IsEnabled="True"
+                         MinHeight="100"
+                         MaxHeight="100"
+                         VerticalScrollBarVisibility="Visible"
+                         Padding="5"
+                      
+                         Margin="0 0 0 20">
+            </RichTextBox>
+
+            <TextBox x:Name="filePathText"
+                         IsEnabled="True"
+                         MinHeight="100"
+                         MaxHeight="100"
+                         VerticalScrollBarVisibility="Visible"
+                         AcceptsTab="True"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Padding="5"
+                         Margin="0 0 0 20">
+            </TextBox>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="12*"/>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="5*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="12*" />
+                </Grid.RowDefinitions>
+
+
+                <CheckBox Grid.Column="0"
+                          VerticalAlignment="Center"
+                          x:Name="enable_dialog_check"
+                          Click="enable_dialog_check_Click"
+                          Checked="enable_dialog_check_Checked"
+                          Unchecked="enable_dialog_check_Unchecked"
+                          Content="Tallózás">
+                </CheckBox>
+                
+                <Button Grid.Column="1"
+                        x:Name="openFileBtn"
+                        Height="25"
+                        Margin="0 10 5 10"
+                        Content="Tallózás"
+                        Click="openFileBtn_Click">
+                </Button>
+                
+                <Button Grid.Column="2"
+                        x:Name="resetFileBtn"
+                        Height="25"
+                        Margin="5 10 5 10"
+                        Content="Törlés"
+                        Click="resetFileBtn_Click">
+                </Button>
+                
+                <Button Grid.Column="3"
+                        x:Name="exportFileBtn"
+                        Height="25"
+                        Margin="5 10 0 10"
+                        Content="Export"
+                        Click="exportFileBtn_Click">
+                </Button>
+                
+            </Grid>
+
+        </StackPanel>
+        
+
+        
+    </Grid>
+</Page>

@@ -205,8 +205,6 @@ namespace Xaml_Game_01
 
         private void Inditas()
         {
-
-
             //indítás gomb letiltása
             InditasGomb.IsEnabled = false;
 
@@ -219,8 +217,6 @@ namespace Xaml_Game_01
             stopperora.Start();
 
             UjKartyaHuzasa();
-
-
 
         }
 
