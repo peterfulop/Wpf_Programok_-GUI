@@ -1,0 +1,52 @@
+﻿<Window x:Class="WPF_Menu.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_Menu"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="380"/>
+        </Grid.RowDefinitions>
+
+
+        <Menu>
+            
+            <MenuItem
+                Header="Kezdőlap"
+                Background="DarkCyan"
+                Foreground="AliceBlue"
+                MinWidth="100"
+                Padding="20 5 20 5">
+            </MenuItem>
+            <MenuItem
+                    Header="almenu 1"
+                    Background="DarkGreen"
+                    Foreground="AliceBlue"
+                    Padding="20 5 20 5">
+            </MenuItem>
+            <MenuItem
+                    Header="almenu 2"
+                    Background="DarkGreen"
+                    Foreground="AliceBlue"
+                    Padding="20 5 20 5">
+            </MenuItem>
+            <MenuItem
+                    Header="almenu"
+                    Background="DarkGreen"
+                    Foreground="AliceBlue"
+                    Padding="20 5 20 5">
+            </MenuItem>
+
+        </Menu>
+        
+    </Grid>
+    
+    
+    
+    
+</Window>
